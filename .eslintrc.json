@@ -32,7 +32,13 @@
         "react/jsx-filename-extension": [1, {
             "extensions": [".tsx"]
         }],
+        "react/jsx-props-no-spreading": "off",
+        "react/prop-types": "off",
         "import/prefer-default-export": "off",
+        "no-unused-expressions": "off",
+        "@typescript-eslint/explicit-function-return-type": ["error", {
+            "allowExpressiong": true
+        }],
         "import/extensions": [
             "error",
             "ignorePackages",
@@ -54,6 +60,6 @@
     "settings": {
         "import/resolver": {
             "typescript": {}
-          }
+        }
     }
 }
