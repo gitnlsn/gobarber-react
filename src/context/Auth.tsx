@@ -13,7 +13,7 @@ interface Credentials {
 }
 
 interface AuthContextData {
-    name: string;
+    authState: AuthState;
     signIn(crendtials: Credentials): Promise<void>;
     signOut(): void;
 }
@@ -25,6 +25,11 @@ export const AuthProvider: React.FC = ({ children }) => {
     const [data, setData] = useState<AuthState>(() => {
         const token = localStorage.getItem('@goBarber:token');
         const user = localStorage.getItem('@goBarber:user');
+
+        console.log({
+            token,
+            user
+        });
 
         if (token && user) {
             return ({
@@ -63,7 +68,13 @@ export const AuthProvider: React.FC = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ name: 'nelson', signIn, signOut }}>
+        <AuthContext.Provider
+            value={{
+                authState: data,
+                signIn,
+                signOut,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     )
