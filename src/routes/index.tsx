@@ -3,9 +3,11 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import { useAuth } from '../context/Auth';
 
-import SignIn from '../pages/SignIn';
-import SignUp from '../pages/SignUp';
-import Dashboard from '../pages/dashboard';
+import SignIn from '../pages/session/SignIn';
+import SignUp from '../pages/session/SignUp';
+import ForgotPassword from '../pages/session/ForgotPassword';
+import ResetPassword from '../pages/session/ResetPassword';
+import Dashboard from '../pages/Dashboard';
 
 const Routes: React.FC = () => {
 
@@ -18,6 +20,18 @@ const Routes: React.FC = () => {
                 /* if not authenticated, redirect to dashboard */
                 if (authState.token) return <Redirect to="dashboard"/>;
                 return <SignIn />;
+            }} />
+
+            {/* LOGIN */}
+            <Route path="/forgot-password" render={() => {
+                /* if not authenticated, redirect to dashboard */
+                return <ForgotPassword />;
+            }} />
+
+            {/* LOGIN */}
+            <Route path="/reset-password" render={() => {
+                /* if not authenticated, redirect to dashboard */
+                return <ResetPassword />;
             }} />
 
             {/* REGISTER */}
@@ -35,7 +49,7 @@ const Routes: React.FC = () => {
             }} />
 
             {/* DEFAULT: redirect to login */}
-            <Route path="/" render={() => <Redirect to="login"/>}/>
+            <Route path="/" render={() => <Redirect to="/login"/>}/>
         </Switch>
     );
 }

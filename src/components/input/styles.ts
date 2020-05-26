@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import Tooltip from '../tooltip';
 
 interface ContainerProps {
+    isHidden: boolean;
     isFocused: boolean;
     isFilled: boolean;
     isErrored: boolean;
@@ -21,6 +22,10 @@ export const Container = styled.div<ContainerProps>`
     & + & {
         margin-top: 8px;
     }
+
+    ${(props) => props.isHidden && css`
+        display: none;
+    `}
 
     ${(props) => props.isErrored && css`
         border-color: #C53030;

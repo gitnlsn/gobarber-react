@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 
-import signInBackgroungImg from '../../assets/sign-in-background.png';
+import signInBackgroungImg from '../../../assets/sign-up-background.png';
 
 export const Container = styled.div`
     height: 100vh;
@@ -10,10 +10,10 @@ export const Container = styled.div`
     align-items: stretch;
 `;
 
-const appearFromLeft = keyframes`
+const appearFromRight = keyframes`
     from {
         opacity: 0;
-        transform: translateX(-50px);
+        transform: translateX(50px);
     }
     to {
         opacity: 1;
@@ -27,7 +27,7 @@ export const AnimationContainer = styled.div`
     align-items: center;
     place-content: center;
 
-    animation: ${appearFromLeft} 1s;
+    animation: ${appearFromRight} 1s;
 
     form {
         margin: 80px 0;
@@ -80,6 +80,7 @@ export const Content = styled.div`
     width: 100%;
     max-width: 700px;
 `;
+
 
 export const Background = styled.div`
     flex: 1;

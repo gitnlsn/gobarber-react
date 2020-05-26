@@ -9,19 +9,31 @@ import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 import * as Yup from 'yup';
 
-import logoImg from '../../assets/logo.svg';
+import logoImg from '../../../assets/logo.svg';
 
 import { Container, Content, Background, AnimationContainer } from './styles';
-import Input from '../../components/input';
-import Button from '../../components/button';
+import Input from '../../../components/input';
+import Button from '../../../components/button';
 
-import getvalidationErrors from '../../utils/getvalidationErrors';
+import getvalidationErrors from '../../../utils/getvalidationErrors';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../../context/Auth';
+import { useToast } from '../../../context/Toast';
+import getValidationErrors from '../../../utils/getvalidationErrors';
+
+interface FormData {
+    name: string;
+    email: string;
+    password: string;
+}
 
 const SignUp: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
 
-    const handleSubmit = useCallback(async (data: object) => {
+    const { signUpClient } = useAuth();
+    const { addToast } = useToast();
+
+    const handleSubmit = useCallback(async (data: FormData) => {
         formRef.current?.setErrors({});
         try {
             const schema = Yup.object().shape({
@@ -35,11 +47,25 @@ const SignUp: React.FC = () => {
             await schema.validate(data, {
                 abortEarly: false,
             });
+
+            await signUpClient({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+            });
         } catch (error) {
-            formRef.current?.setErrors(getvalidationErrors(error));
-            console.log(error);
+            if (error instanceof Yup.ValidationError) {
+                formRef.current?.setErrors(getValidationErrors(error));
+                console.log(error);
+                return;
+            }
+            addToast({
+                title: 'Erro no cadastro',
+                description: 'Verifique as credenciais.',
+                type: 'error',
+            });
         }
-    }, []);
+    }, [signUpClient]);
 
     return (
         <Container>
@@ -54,7 +80,7 @@ const SignUp: React.FC = () => {
                         ref={formRef}
                         onSubmit={handleSubmit}
                     >
-                        <h1>{'Faça seu Cadastro'}</h1>
+                        <h1>{'Cadastro'}</h1>
 
                         <Input icon={FiUser} name="name" placeholder="Nome" />
                         <Input icon={FiMail} name="email" placeholder="Email" />

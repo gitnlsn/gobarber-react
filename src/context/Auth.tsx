@@ -1,21 +1,51 @@
 import React, { createContext, useCallback, useState, useContext } from "react";
 
 import api from '../services/api';
+import { createHash } from "crypto";
 
 interface AuthState {
     token: string;
     user: object;
 }
 
-interface Credentials {
-    email: string,
-    password: string,
+interface LoginCredentials {
+    email: string;
+    password: string;
+}
+
+interface ForgotPasswordCredentials {
+    email: string;
+}
+
+interface ResetPasswordCredentials {
+    token: string;
+    password: string;
+}
+
+interface RegisterClientCredentials {
+    name: string;
+    email: string;
+    password: string;
+}
+
+interface RegisterShopCredentials {
+    name: string;
+    barbershop: {
+        name: string;
+        address: string;
+    }
+    email: string;
+    password: string;
 }
 
 interface AuthContextData {
     authState: AuthState;
-    signIn(crendtials: Credentials): Promise<void>;
+    signIn(credentials: LoginCredentials): Promise<void>;
+    signUpClient(credentials: RegisterClientCredentials): Promise<void>;
+    signUpShop(credentials: RegisterShopCredentials): Promise<void>;
     signOut(): void;
+    forgotPassword(credentials: ForgotPasswordCredentials): Promise<void>;
+    resetPassword(credentials: ResetPasswordCredentials): Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextData>({} as AuthContextData);
@@ -25,11 +55,6 @@ export const AuthProvider: React.FC = ({ children }) => {
     const [data, setData] = useState<AuthState>(() => {
         const token = localStorage.getItem('@goBarber:token');
         const user = localStorage.getItem('@goBarber:user');
-
-        console.log({
-            token,
-            user
-        });
 
         if (token && user) {
             return ({
@@ -44,7 +69,7 @@ export const AuthProvider: React.FC = ({ children }) => {
     const signIn = useCallback(async ({
         email,
         password,
-    }: Credentials): Promise<void> => {
+    }: LoginCredentials): Promise<void> => {
         const {
             data: {
                 token,
@@ -52,7 +77,62 @@ export const AuthProvider: React.FC = ({ children }) => {
             },
         } = await api.post(
             'user/authenticate',
-            { email, password },
+            {
+                email,
+                password: createHash('sha256').update(password).digest('hex'),
+            },
+        );
+
+        localStorage.setItem('@goBarber:token', token);
+        localStorage.setItem('@goBarber:user', JSON.stringify(user));
+
+        setData({ token, user });
+    }, []);
+
+    const signUpClient = useCallback(async ({
+        name,
+        email,
+        password,
+    }: RegisterClientCredentials): Promise<void> => {
+        const {
+            data: {
+                token,
+                user,
+            },
+        } = await api.post(
+            'user/register',
+            {
+                name,
+                email,
+                password: createHash('sha256').update(password).digest('hex'),
+            },
+        );
+
+        localStorage.setItem('@goBarber:token', token);
+        localStorage.setItem('@goBarber:user', JSON.stringify(user));
+
+        setData({ token, user });
+    }, []);
+
+    const signUpShop = useCallback(async ({
+        name,
+        barbershop,
+        email,
+        password,
+    }: RegisterShopCredentials): Promise<void> => {
+        const {
+            data: {
+                token,
+                user,
+            },
+        } = await api.post(
+            'barbershop/register',
+            {
+                name,
+                barbershop,
+                email,
+                password: createHash('sha256').update(password).digest('hex'),
+            },
         );
 
         localStorage.setItem('@goBarber:token', token);
@@ -67,12 +147,48 @@ export const AuthProvider: React.FC = ({ children }) => {
         setData({} as AuthState);
     }, []);
 
+    const forgotPassword = useCallback(async ({
+        email,
+    }: ForgotPasswordCredentials): Promise<void> => {
+        await api.post(
+            'user/password/forgot',
+            { email },
+        );
+    }, []);
+
+    const resetPassword = useCallback(async ({
+        token: resetToken,
+        password,
+    }: ResetPasswordCredentials): Promise<void> => {
+        const {
+            data: {
+                token,
+                user,
+            },
+        } = await api.post(
+            'user/password/reset',
+            {
+                token: resetToken,
+                newPassword: createHash('sha256').update(password).digest('hex'),
+            },
+        );
+
+        localStorage.setItem('@goBarber:token', token);
+        localStorage.setItem('@goBarber:user', JSON.stringify(user));
+
+        setData({ token, user });
+    }, []);
+
     return (
         <AuthContext.Provider
             value={{
                 authState: data,
                 signIn,
                 signOut,
+                signUpClient,
+                signUpShop,
+                forgotPassword,
+                resetPassword,
             }}
         >
             {children}

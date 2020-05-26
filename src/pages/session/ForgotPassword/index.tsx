@@ -4,26 +4,25 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 
-import { useAuth } from '../../context/Auth';
+import { useAuth } from '../../../context/Auth';
 
-import Input from '../../components/input';
-import Button from '../../components/button';
-import getValidationErrors from '../../utils/getvalidationErrors';
+import Input from '../../../components/input';
+import Button from '../../../components/button';
+import getValidationErrors from '../../../utils/getvalidationErrors';
 
 import { Container, Content, Background, AnimationContainer } from './styles';
-import logoImg from '../../assets/logo.svg';
-import { useToast } from '../../context/Toast';
+import logoImg from '../../../assets/logo.svg';
+import { useToast } from '../../../context/Toast';
 import { Link } from 'react-router-dom';
 
 interface FormData {
     email: string;
-    password: string;
 }
 
-const SignIn: React.FC = () => {
+const ForgotPassword: React.FC = () => {
     const formRef = useRef<FormHandles>(null);
 
-    const { signIn } = useAuth();
+    const { forgotPassword } = useAuth();
     const { addToast } = useToast();
 
     const handleSubmit = useCallback(async (data: FormData) => {
@@ -33,16 +32,14 @@ const SignIn: React.FC = () => {
                 email: Yup.string()
                     .required('E-mail obrigatório')
                     .email('Digite um e-mail válido'),
-                password: Yup.string().required('Senha obrigatória'),
             });
 
             await schema.validate(data, {
                 abortEarly: false,
             });
 
-            await signIn({
+            await forgotPassword({
                 email: data.email,
-                password: data.password,
             });
         } catch (error) {
             if (error instanceof Yup.ValidationError) {
@@ -51,12 +48,12 @@ const SignIn: React.FC = () => {
                 return;
             }
             addToast({
-                title: 'Erro na autenticação',
+                title: 'Erro ao solicitar alteração de senha.',
                 description: 'Verifique as credenciais.',
                 type: 'error',
             });
         }
-    }, [signIn]);
+    }, [forgotPassword]);
 
     return (
         <Container>
@@ -69,14 +66,13 @@ const SignIn: React.FC = () => {
                         ref={formRef}
                         onSubmit={handleSubmit}
                     >
-                        <h1>{'Faça seu Logon'}</h1>
+                        <h1>{'Esqueci a Senha'}</h1>
 
                         <Input icon={FiMail} name="email" placeholder="Email" />
-                        <Input icon={FiLock} name="password" placeholder="Senha" type="password" />
 
-                        <Button type="submit">{'Entrar'}</Button>
+                        <Button type="submit">{'Enviar'}</Button>
 
-                        <a href="forgot">{'Esqueci a minha senha'}</a>
+                        <a href="login">{'Fazer o login'}</a>
                     </Form>
 
                     <Link to="register">
@@ -92,4 +88,4 @@ const SignIn: React.FC = () => {
     );
 };
 
-export default SignIn;
+export default ForgotPassword;

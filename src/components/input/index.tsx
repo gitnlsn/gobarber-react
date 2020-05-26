@@ -20,6 +20,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input: React.FC<InputProps> = ({
     name,
     icon: Icon,
+    hidden,
     ...props
 }) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -51,6 +52,7 @@ const Input: React.FC<InputProps> = ({
 
     return (
         <Container
+            isHidden={!!hidden}
             isErrored={!!error}
             isFocused={isFocused}
             isFilled={isFilled}
