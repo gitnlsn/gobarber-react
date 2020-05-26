@@ -72,7 +72,7 @@ const ForgotPassword: React.FC = () => {
 
                         <Button type="submit">{'Enviar'}</Button>
 
-                        <a href="login">{'Fazer o login'}</a>
+                        <Link to="login">{'Fazer o login'}</Link>
                     </Form>
 
                     <Link to="register">

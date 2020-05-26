@@ -3,9 +3,18 @@ import React, { createContext, useCallback, useState, useContext } from "react";
 import api from '../services/api';
 import { createHash } from "crypto";
 
+interface User {
+    email: string;
+    name: string;
+    barbershop?: {
+        name: string;
+        address: string;
+    }
+}
+
 interface AuthState {
     token: string;
-    user: object;
+    user: User;
 }
 
 interface LoginCredentials {
@@ -40,6 +49,7 @@ interface RegisterShopCredentials {
 
 interface AuthContextData {
     authState: AuthState;
+    user: User;
     signIn(credentials: LoginCredentials): Promise<void>;
     signUpClient(credentials: RegisterClientCredentials): Promise<void>;
     signUpShop(credentials: RegisterShopCredentials): Promise<void>;
@@ -183,6 +193,7 @@ export const AuthProvider: React.FC = ({ children }) => {
         <AuthContext.Provider
             value={{
                 authState: data,
+                user: data.user,
                 signIn,
                 signOut,
                 signUpClient,
