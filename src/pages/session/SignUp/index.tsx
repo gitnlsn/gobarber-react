@@ -80,7 +80,7 @@ const SignUp: React.FC = () => {
                         ref={formRef}
                         onSubmit={handleSubmit}
                     >
-                        <h1>{'Cadastro'}</h1>
+                        <h1>{'Cadastro de Cliente'}</h1>
 
                         <Input icon={FiUser} name="name" placeholder="Nome" />
                         <Input icon={FiMail} name="email" placeholder="Email" />
