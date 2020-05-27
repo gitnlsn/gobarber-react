@@ -13,7 +13,7 @@ import getValidationErrors from '../../../utils/getvalidationErrors';
 import { Container, Content, Background, AnimationContainer } from './styles';
 import logoImg from '../../../assets/logo.svg';
 import { useToast } from '../../../context/Toast';
-import { Link, useLocation, Redirect } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 
 interface FormData {
     token: string;
@@ -26,6 +26,7 @@ const ResetPassword: React.FC = () => {
 
     const { resetPassword } = useAuth();
     const { addToast } = useToast();
+    const history = useHistory();
 
     const resetToken = new URLSearchParams(useLocation().search).get('token') || undefined;
 
@@ -49,6 +50,8 @@ const ResetPassword: React.FC = () => {
                 token: data.token,
                 password: data.newPassword,
             });
+
+            history.push('/');
         } catch (error) {
             if (error instanceof Yup.ValidationError) {
                 formRef.current?.setErrors(getValidationErrors(error));
@@ -101,7 +104,7 @@ const ResetPassword: React.FC = () => {
 
                         <Button type="submit">{'Enviar'}</Button>
 
-                        <a href="login">{'Fazer o login'}</a>
+                        <Link to="login">{'Fazer o login'}</Link>
                     </Form>
 
                     <Link to="register">

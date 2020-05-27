@@ -2,11 +2,11 @@
 <h1 align="center">GoBarber React App</h1>
 <p align="center" >
 
-<img src="https://img.shields.io/badge/language-typescript-blue.svg" />
-
-<img src="https://img.shields.io/badge/language-react-blue.svg" />
-
-<img src="https://img.shields.io/codecov/c/github/nelsonatgithub/gobarber-react/dev.svg" />
+<img src="https://img.shields.io/badge/language-react--typescript-blue.svg" />
+<a href="https://codecov.io/gh/nelsonatgithub/gobarber-react"><img src="https://img.shields.io/codecov/c/github/nelsonatgithub/gobarber-react/dev.svg" /></a>
+<a href="https://stats.uptimerobot.com/Wj6Alhjy9q/785050967"><img src="https://img.shields.io/uptimerobot/ratio/7/m785050967-4b90885fe91ee5c2007ba853.svg" /></a>
+<a href="https://stats.uptimerobot.com/Wj6Alhjy9q/785050967"><img src="https://img.shields.io/uptimerobot/status/m785050967-4b90885fe91ee5c2007ba853.svg" /></a>
+<a href="https://observatory.mozilla.org/analyze/nlsn-gobarber.netlify.app"><img src="https://img.shields.io/mozilla-observatory/grade-score/nlsn-gobarber.netlify.app?publish.svg" /></a>
 
 </p>
 </html>

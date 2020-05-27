@@ -41,6 +41,12 @@ const ForgotPassword: React.FC = () => {
             await forgotPassword({
                 email: data.email,
             });
+
+            addToast({
+                title: 'Email de Recuperação de Senha Enviado',
+                description: 'Verifique as seu email.',
+                type: 'info',
+            });
         } catch (error) {
             if (error instanceof Yup.ValidationError) {
                 formRef.current?.setErrors(getValidationErrors(error));
